@@ -26,6 +26,7 @@ resource "aws_security_group" "jenkins_master_sg" {
     to_port         = "8080"
     protocol        = "tcp"
     security_groups = [aws_security_group.elb_jenkins_sg.id]
+    cidr_blocks = [var.cidr_block]
   }
 
   egress {

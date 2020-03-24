@@ -13,7 +13,7 @@
             "instance_type" : "{{user `instance_type`}}",
             "source_ami" : "{{user `source_ami`}}",
             "ssh_username" : "ec2-user",
-            "ami_name" : "jenkins-worker",
+            "ami_name" : "jenkins-worker1",
             "ami_description" : "Jenkins worker's AMI",
             "run_tags" : {
                 "Name" : "packer-builder"

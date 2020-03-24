@@ -45,6 +45,21 @@ variable "ssl_arn" {
   description = "ACM SSL ARN"
 }
 
+variable "jenkins_username" {
+  type = string
+  description = "Jenkins admin user"
+}
+
+variable "jenkins_password" {
+  type = string
+  description = "Jenkins admin password"
+}
+
+variable "jenkins_credentials_id" {
+  type = string
+  description = "Jenkins workers SSH based credentials id"
+}
+
 // Default values
 
 variable "vpc_name" {
@@ -81,4 +96,10 @@ variable "jenkins_master_instance_type" {
   type = string
   description = "Jenkins master EC2 instance type"
   default = "t2.large"
+}
+
+variable "jenkins_worker_instance_type" {
+  type = string
+  description = "Jenkins worker EC2 instance type"
+  default = "t2.medium"
 }
