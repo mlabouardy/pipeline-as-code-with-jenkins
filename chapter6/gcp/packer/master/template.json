@@ -1,0 +1,41 @@
+{
+    "variables" : {
+        "service_account" : "SERVICE ACCOUNT FILE",
+        "project": "GCP PROJECT ID",
+        "zone": "ZONE ID",
+        "ssh_key" : "PRIVATE SSH KEY"
+    },
+    "builders" : [
+        {
+            "type": "googlecompute",
+            "image_name" : "jenkins-master-v22041",
+            "account_file": "{{user `service_account`}}",
+            "project_id": "{{user `project`}}",
+            "source_image_family": "centos-8",
+            "ssh_username": "packer",
+            "zone": "{{user `zone`}}"
+          }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "./scripts",
+            "destination" : "/tmp/"
+        },
+        {
+            "type" : "file",
+            "source" : "./config",
+            "destination" : "/tmp/"
+        },
+        {
+            "type" : "file",
+            "source" : "{{user `ssh_key`}}",
+            "destination" : "/tmp/id_rsa"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "variables" : {
+        "api_token" : "d8dea550edff6a3273ef9014c44d0db1f3e2f531a78d6f913e312745136c2e19",
+        "region": "lon1"
+    },
+    "builders" : [
+        {
+            "type": "digitalocean",
+            "api_token": "{{user `api_token`}}",
+            "image": "centos-8-x64",
+            "region": "{{user `region`}}",
+            "size": "512mb",
+            "ssh_username": "root",
+            "snapshot_name": "jenkins-worker"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

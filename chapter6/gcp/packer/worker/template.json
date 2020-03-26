@@ -1,0 +1,25 @@
+{
+    "variables" : {
+        "service_account" : "SERVICE ACCOUNT FILE",
+        "project": "GCP PROJECT ID",
+        "zone": "ZONE ID"
+    },
+    "builders" : [
+        {
+            "type": "googlecompute",
+            "image_name" : "jenkins-worker",
+            "account_file": "{{user `service_account`}}",
+            "project_id": "{{user `project`}}",
+            "source_image_family": "centos-8",
+            "ssh_username": "packer",
+            "zone": "{{user `zone`}}"
+          }
+    ],
+    "provisioners" : [
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

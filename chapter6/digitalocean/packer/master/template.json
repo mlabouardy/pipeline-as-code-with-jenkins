@@ -1,0 +1,40 @@
+{
+    "variables" : {
+        "api_token" : "API TOKEN",
+        "region": "REGION",
+        "ssh_key" : "PRIVATE SSH KEY"
+    },
+    "builders" : [
+        {
+            "type": "digitalocean",
+            "api_token": "{{user `api_token`}}",
+            "image": "centos-8-x64",
+            "region": "{{user `region`}}",
+            "size": "2gb",
+            "ssh_username": "root",
+            "snapshot_name": "jenkins-master-2.204.1"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "./scripts",
+            "destination" : "/tmp/"
+        },
+        {
+            "type" : "file",
+            "source" : "./config",
+            "destination" : "/tmp/"
+        },
+        {
+            "type" : "file",
+            "source" : "{{user `ssh_key`}}",
+            "destination" : "/tmp/id_rsa"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
