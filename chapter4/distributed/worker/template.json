@@ -1,9 +1,9 @@
 {
     "variables" : {
-        "region" : "eu-central-1",
-        "aws_profile": "default",
-        "source_ami" : "ami-010fae13a16763bb4",
-        "instance_type": "t2.micro"
+        "region" : "AWS REGION",
+        "aws_profile": "AWS PROFILE",
+        "source_ami" : "AMAZON LINUX AMI 2 ID",
+        "instance_type": "INSTANCE TYPE"
     },
     "builders" : [
         {
