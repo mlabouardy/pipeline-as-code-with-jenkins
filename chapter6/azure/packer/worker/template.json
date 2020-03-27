@@ -1,0 +1,34 @@
+{
+    "variables" : {
+        "subscription_id" : "SUBSCRIPTION ID",
+        "client_id": "CLIENT ID",
+        "client_secret": "CLIENT SECRET",
+        "tenant_id": "TENANT ID",
+        "resource_group": "RESOURCE GROUP NAME",
+        "location": "LOCATION NAME"
+    },
+    "builders" : [
+        {
+            "type": "azure-arm",
+            "subscription_id": "{{user `subscription_id`}}",
+            "client_id": "{{user `client_id`}}",
+            "client_secret": "{{user `client_secret`}}",
+            "tenant_id": "{{user `tenant_id`}}",
+            "managed_image_resource_group_name": "{{user `resource_group`}}",
+            "managed_image_name": "jenkins-worker",
+            "os_type": "Linux",
+            "image_publisher": "OpenLogic",
+            "image_offer": "CentOS",
+            "image_sku": "8.0",
+            "location": "{{user `location`}}",
+            "vm_size": "Standard_B1s"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
