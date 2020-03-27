@@ -1,4 +1,6 @@
-## Chapters
+## Pipeline as Code with Jenkins
+
+## Content
 
 * What's CI/CD ?
 * Pipeline as Code with Jenkins
