@@ -17,10 +17,6 @@
             "ami_description" : "Amazon Linux Image with Jenkins Server",
             "run_tags" : {
                 "Name" : "packer-builder"
-            },
-            "tags" : {
-                "Tool" : "Packer",
-                "Author" : "mlabouardy"
             }
         }
     ],

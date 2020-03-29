@@ -17,10 +17,6 @@
             "ami_description" : "Jenkins worker's AMI",
             "run_tags" : {
                 "Name" : "packer-builder"
-            },
-            "tags" : {
-                "Tool" : "Packer",
-                "Author" : "mlabouardy"
             }
         }
     ],
