@@ -4,7 +4,7 @@ JENKINS_URL="${jenkins_url}"
 JENKINS_USERNAME="${jenkins_username}"
 JENKINS_PASSWORD="${jenkins_password}"
 TOKEN=$(curl -u $JENKINS_USERNAME:$JENKINS_PASSWORD ''$JENKINS_URL'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
-INSTANCE_NAME=$(curl -s http://169.254.169.254/metadata/v1/hostname)
+INSTANCE_NAME=$(curl -s http://169.254.169.254/metadata/instance/compute/name?api-version=2019-06-01&format=text)
 INSTANCE_IP=$(curl -s http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/privateIpAddress?api-version=2017-08-01&format=text)
 JENKINS_CREDENTIALS_ID="${jenkins_credentials_id}"
 
