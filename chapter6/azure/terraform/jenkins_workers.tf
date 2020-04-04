@@ -3,6 +3,17 @@ data "azurerm_image" "jenkins_worker_image" {
   resource_group_name = data.azurerm_resource_group.management.name
 }
 
+data "template_file" "jenkins_worker_startup_script" {
+  template = "${file("scripts/join-cluster.tpl")}"
+
+  vars = {
+    jenkins_url            = "http://${azurerm_public_ip.jenkins_lb_public_ip.ip_address}:8080"
+    jenkins_username       = var.jenkins_username
+    jenkins_password       = var.jenkins_password
+    jenkins_credentials_id = var.jenkins_credentials_id
+  }
+}
+
 resource "azurerm_virtual_machine_scale_set" "jenkins_workers_set" {
   name                = "jenkins-workers-set"
   location            = var.location
@@ -28,6 +39,7 @@ resource "azurerm_virtual_machine_scale_set" "jenkins_workers_set" {
   os_profile {
     computer_name_prefix = "jenkins-worker"
     admin_username = var.config["vm_username"]
+    custom_data = data.template_file.jenkins_worker_startup_script.rendered
   }
 
   os_profile_linux_config {

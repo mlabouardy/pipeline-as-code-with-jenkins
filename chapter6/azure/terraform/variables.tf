@@ -34,6 +34,21 @@ variable "public_ssh_key" {
   description = "Public ssh key path"
 }
 
+variable "jenkins_username" {
+  type = string
+  description = "Jenkins admin user"
+}
+
+variable "jenkins_password" {
+  type = string
+  description = "Jenkins admin password"
+}
+
+variable "jenkins_credentials_id" {
+  type = string
+  description = "Jenkins workers SSH based credentials id"
+}
+
 // Default values
 variable "base_cidr_block" {
     type = string
