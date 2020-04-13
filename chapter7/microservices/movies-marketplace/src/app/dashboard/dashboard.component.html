@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search" [(ngModel)]="keyword">
+                    <button class="btn btn-primary search-btn" (click)="searchMovie()">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-2" *ngFor="let movie of movies">
+            <div class="card" >
+                <img class="card-img-top" src="{{movie.poster}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{movie.title}}</h5>
+                    <p class="card-text">{{movie.description}}</p>
+                    <a routerLink="/movies/{{movie.id}}" class="btn btn-primary"><i class="fa fa-eye"></i> View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+.card-text{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 100px;;
+}
+
+.card-title{
+    height: 50px;
+    font-size: 1.1rem;
+}
+
+.card{
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

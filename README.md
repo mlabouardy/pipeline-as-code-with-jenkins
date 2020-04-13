@@ -8,6 +8,7 @@
 * Baking Machine Images with Packer
 * Discovering Jenkins as Code with Terraform
 * Deploying HA Jenkins on Multiple Cloud Providers
+* Dockerized Microservices on K8s
 
 ## Author
 

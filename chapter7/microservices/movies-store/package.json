@@ -1,0 +1,22 @@
+{
+  "name": "movies-store",
+  "version": "1.0.0",
+  "description": "Movies store's API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "movies",
+    "nodejs",
+    "store"
+  ],
+  "author": "Mohamed Labouardy",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongodb": "^3.5.5"
+  }
+}

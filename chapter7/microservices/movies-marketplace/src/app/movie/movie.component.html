@@ -1,0 +1,63 @@
+<div class="container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Movies</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{movie.title}}</li>
+        </ol>
+    </nav>
+    <div class="row actions">
+        <div class="col-lg-12">
+            <button class="btn btn-warning pull-right" style="margin-left:5px;" routerLink="/favorites"><i class="fa fa-star"></i> View
+                favorites</button>
+            <button class="btn btn-info pull-right" (click)="addToFav()"><i class="fa fa-heart"></i> Add to Watchlist</button>
+        </div>
+    </div>
+    <div class="row details">
+        <div class="col-lg-2">
+            <div>
+                <img src="{{movie.poster}}" alt="">
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div>
+                <span class="title">{{movie.title}}</span> <br />
+                <div>
+                    <span class="badge badge-danger">{{movie.releaseDate}}</span>
+                    <span class="badge badge-info"># {{movie.rank}}</span>
+                </div>
+            </div>
+            <div>
+                <p>{{movie.description}}</p>
+            </div>
+            <div>
+                <span class="title">Videos:</span> <br />
+                <img *ngFor="let video of movie.videos" class="video" src="{{video}}">
+            </div>
+            <div style="margin-top:10px">
+                <span class="title">More like this:</span> <br /><br />
+                <div *ngFor="let similar of movie.similar">
+                    <img class="similar" src="{{similar.poster}}" />
+                    {{similar.title}}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Picture</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let actor of movie.actors">
+                        <td><img src="{{actor.picture}}"></td>
+                        <td>{{actor.name}}</td>
+                        <td>{{actor.role}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
