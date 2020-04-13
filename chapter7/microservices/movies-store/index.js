@@ -1,54 +1,45 @@
 const Express = require('express');
 const BodyParser= require('body-parser');
+const DAO = require('./dao');
 const Cors = require('cors');
-const MongoClient = require('mongodb').MongoClient;
 const App = Express();
 
 App.use(Cors())
 App.use(BodyParser.urlencoded({ extended: true }))
 App.use(BodyParser.json())
 
-var db;
+DAO.init()
 
-MongoClient.connect(process.env.MONGO_URI, {useUnifiedTopology: true}, (err, database) => {
-  if (err) return console.log(err)
-  db = database.db(process.env.MONGO_DATABASE)
-  App.listen(process.env.PORT || 3000, () => {
-    console.log('listening on 3000')
-  })
+App.get('/movies', async (req, res) => {
+    const movies = await DAO.Movie.find();
+    if (!movies) 
+        return res.status(404).send("Movies not found");
+    return res.send(movies);
 })
 
-App.get('/movies', (req, res) => {
-    db.collection('movies').find().toArray((err, result) => {
-        if (err) 
-            return console.log(err)
-        res.send(result)
-    })
-})
-
-App.get('/movies/:name', (req, res) => {
-    db.collection('movies').findOne({'$or': [
+App.get('/movies/:name', async (req, res) => {
+    let movie = await DAO.Movie.findOne({'$or': [
         {title: new RegExp( `.*${req.params.name}.`, "i")},
         {id: req.params.name},
-    ]}, (err, result) => {
-        if (err) 
-            return console.log(err)
-        res.send(result)
-    })
+    ]})
+    if (!movie) 
+        return res.status(404).send("Movie not found");
+    return res.send(movie);
 })
 
-App.post('/favorites', (req, res) => {
-    db.collection('favorites').save(req.body, (err, result) => {
-        if (err) 
-            return console.log(err)
-        res.send({message:'success'})
-    })
+App.post('/favorites', async (req, res) => {
+    let favorite = new DAO.Favorite(req.body);
+    await favorite.save();
+    res.send({message:'success'})
 })
 
-App.get('/favorites', (req, res) => {
-    db.collection('favorites').find().toArray((err, result) => {
-        if (err) 
-            return console.log(err)
-        res.send(result)
-    })
+App.get('/favorites', async (req, res) => {
+    const favorites = await DAO.Favorite.find();
+    if (!favorites) 
+        return res.status(404).send("Favorites list is empty");
+    return res.send(favorites);
+})
+
+App.listen(process.env.PORT || 3000, () => {
+    console.log('listening on 3000')
 })

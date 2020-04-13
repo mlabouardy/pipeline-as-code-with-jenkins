@@ -17,6 +17,11 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mongodb": "^3.5.5"
+    "mongoose": "^5.9.9"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "mongo-unit": "^2.0.1"
   }
 }
