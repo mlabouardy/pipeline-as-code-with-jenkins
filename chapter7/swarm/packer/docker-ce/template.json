@@ -1,0 +1,30 @@
+{
+    "variables" : {
+        "region" : "eu-west-3",
+        "aws_profile": "personal",
+        "source_ami" : "ami-06cba15121418cdcb",
+        "instance_type": "t2.small"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "{{user `aws_profile`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "docker-18.09.9-ce",
+            "ami_description" : "Docker engine AMI",
+            "run_tags" : {
+                "Name" : "packer-builder"
+            }
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
