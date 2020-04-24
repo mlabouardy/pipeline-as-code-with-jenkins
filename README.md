@@ -8,8 +8,9 @@
 * Baking Machine Images with Packer
 * Discovering Jenkins as Code with Terraform
 * Deploying HA Jenkins on Multiple Cloud Providers
+* Defining Pipeline as Code for Microservices
 * Cloud Native Applications on Docker Swarm
-* Dockerized Microservices on K8s
+* Dockerized Containers on K8s
 
 ## Author
 
