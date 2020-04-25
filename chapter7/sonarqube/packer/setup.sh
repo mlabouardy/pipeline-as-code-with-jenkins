@@ -30,14 +30,14 @@ unzip /tmp/$SONAR_VERSION.zip
 mv $SONAR_VERSION sonarqube
 mv sonarqube /opt/
 
-# Configure SonarQube to use MySQL
+# Configure SonarQube to use PostgreSQL
 cat > /tmp/sonar.properties <<EOF
 sonar.jdbc.username=$SONAR_DB_USER
 sonar.jdbc.password=$SONAR_DB_PASS
 sonar.jdbc.url=jdbc:postgresql://localhost/$SONAR_DB_NAME
 EOF
 mv /tmp/sonar.properties /opt/sonarqube/conf/sonar.properties
-sed -i 's/#RUN_AS_USER=/RUN_AS_USER=sonar/' sonar.sh
+sed -i 's/#RUN_AS_USER=/RUN_AS_USER=sonar/' /opt/sonarqube/bin/linux-x86-64/sonar.sh
 sysctl -w vm.max_map_count=262144
 
 # Start SonarQube

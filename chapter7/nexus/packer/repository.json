@@ -1,0 +1,5 @@
+{
+    "name": "docker-repository",
+    "type": "groovy",
+    "content": "import org.sonatype.nexus.blobstore.api.BlobStoreManager; import org.sonatype.nexus.repository.storage.WritePolicy; repository.createDockerHosted('docker-registry', 5000, 443, BlobStoreManager.DEFAULT_BLOBSTORE_NAME, true, true, WritePolicy.ALLOW, true)"
+}

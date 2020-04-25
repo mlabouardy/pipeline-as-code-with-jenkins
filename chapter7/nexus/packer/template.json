@@ -1,0 +1,37 @@
+{
+    "variables" : {
+        "region" : "AWS REGION",
+        "aws_profile": "AWS PROFILE ID",
+        "source_ami" : "AMAZON LINUX AMI 2 ID",
+        "instance_type": "EC2 INSTANCE TYPE"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "{{user `aws_profile`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "nexus-3.22.1-02",
+            "ami_description" : "Nexus Repository OSS"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "./nexus.rc",
+            "destination" : "/tmp/nexus.rc"
+        },
+        {
+            "type" : "file",
+            "source" : "./repository.json",
+            "destination" : "/tmp/repository.json"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
