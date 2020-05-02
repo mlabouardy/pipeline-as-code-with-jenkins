@@ -10,6 +10,12 @@ App.use(BodyParser.json())
 
 DAO.init()
 
+App.get('/', async (req, res) => {
+    return res.send({
+        version: '1.0.0'
+    });
+})
+
 App.get('/movies', async (req, res) => {
     const movies = await DAO.Movie.find();
     if (!movies) 

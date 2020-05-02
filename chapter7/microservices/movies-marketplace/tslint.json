@@ -1,6 +1,16 @@
 {
   "extends": "tslint:recommended",
   "rules": {
+    "no-trailing-whitespace": false,
+    "semicolon": false,
+    "whitespace": [
+      false,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-separator",
+      "check-type"
+    ],
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
