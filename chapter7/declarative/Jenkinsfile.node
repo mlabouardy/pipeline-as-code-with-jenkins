@@ -1,0 +1,49 @@
+def imageName = 'mlabouardy/movies-loader'
+def registry = 'https://registry.slowcoder.com'
+
+pipeline{
+    agent{
+        label 'workers'
+    }
+
+    stages{
+        stage('Checkout'){
+            steps{
+                checkout scm
+            }
+        }
+
+        stage('Unit Tests'){
+            steps{
+                script {
+                    def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
+                    imageTest.inside{
+                        sh "python test_main.py"
+                    }
+                }
+            }
+        }
+
+        stage('Build'){
+            steps{
+                script {
+                    docker.build(imageName)
+                }
+            }
+        }
+
+        stage('Push'){
+            steps{
+                script {
+                    docker.withRegistry(registry, 'registry') {
+                        docker.image(imageName).push(commitID())
+
+                        if (env.BRANCH_NAME == 'develop') {
+                            docker.image(imageName).push('develop')
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
