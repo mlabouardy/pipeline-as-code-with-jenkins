@@ -9,6 +9,8 @@
 * Discovering Jenkins as Code with Terraform
 * Deploying HA Jenkins on Multiple Cloud Providers
 * Defining Pipeline as Code for Microservices
+* Running Automated Tests with Jenkins
+* Building Docker Images within CI Pipeline
 * Cloud Native Applications on Docker Swarm
 * Dockerized Containers on K8s
 
