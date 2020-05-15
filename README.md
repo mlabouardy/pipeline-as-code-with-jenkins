@@ -13,6 +13,9 @@
 * Building Docker Images within CI Pipeline
 * Cloud Native Applications on Docker Swarm
 * Dockerized Containers on K8s
+* Lambda based Serverless Functions
+* Collecting Continuous Delivery Metrics
+* CI/CD Deployment Strategies and Best Practices
 
 ## Author
 
