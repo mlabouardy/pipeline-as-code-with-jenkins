@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: movies-parser
+  name: movies-parser
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: movies-parser
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: movies-parser
+    spec:
+      containers:
+      - env:
+        - name: AWS_REGION
+          value: SQS REGION
+        - name: MONGO_DATABASE
+          value: watchlist
+        - name: MONGO_URI
+          value: mongodb://root:root@mongodb/watchlist?retryWrites=true&w=majority&poolSize=1
+        - name: SQS_URL
+          value: https://sqs.REGION.amazonaws.com/ID/movies_to_parse_sandbox
+        image: ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-parser:develop
+        imagePullPolicy: ""
+        name: movies-parser
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

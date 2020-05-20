@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: mongodb
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: mongodb
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: mongodb
+    spec:
+      containers:
+      - env:
+        - name: MONGODB_DATABASE
+          value: watchlist
+        - name: MONGODB_PASSWORD
+          value: root
+        - name: MONGODB_USERNAME
+          value: root
+        image: bitnami/mongodb:latest
+        imagePullPolicy: ""
+        name: mongodb
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

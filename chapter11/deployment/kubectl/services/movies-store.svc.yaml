@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: movies-store
+  namespace: watchlist
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:{region}:{user id}:certificate/{id}
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 3000
+  - name: https
+    port: 443
+    targetPort: 3000
+  selector:
+    app: movies-store
+  type: LoadBalancer

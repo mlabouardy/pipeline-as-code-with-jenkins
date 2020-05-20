@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: movies-store
+  name: movies-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: movies-store
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: movies-store
+    spec:
+      containers:
+      - env:
+        - name: MONGO_URI
+          value: mongodb://root:root@mongodb/watchlist?retryWrites=true&w=majority&poolSize=1
+        image: ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-store:develop
+        imagePullPolicy: ""
+        name: movies-store
+        ports:
+        - containerPort: 3000
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

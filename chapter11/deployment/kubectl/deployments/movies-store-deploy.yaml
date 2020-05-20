@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies-store
+  namespace: watchlist
+spec:
+  selector:
+    matchLabels:
+      app: movies-store
+  template:
+    metadata: 
+      labels: 
+        app: movies-store
+    spec:
+      containers:
+      - name: movies-store
+        image: 305929695733.dkr.ecr.eu-west-3.amazonaws.com/mlabouardy/movies-store:develop
+        ports:
+        - containerPort: 3000
+        env:
+        - name: MONGO_URI
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-access
+              key: uri

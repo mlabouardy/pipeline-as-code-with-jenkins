@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: watchlist
+spec:
+  selector:
+    matchLabels:
+      app: mongodb
+      tier: mongodb
+  template:
+    metadata: 
+      labels: 
+        app: mongodb
+        tier: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: bitnami/mongodb:latest
+        ports:
+        - containerPort: 27017
+          name: mongodb
+        env:
+        - name: MONGODB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-access
+              key: username
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-access
+              key: password
+        - name: MONGODB_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-access
+              key: database

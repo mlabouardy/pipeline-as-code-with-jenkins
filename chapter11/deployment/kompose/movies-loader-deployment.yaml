@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: movies-loader
+  name: movies-loader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: movies-loader
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: movies-loader
+    spec:
+      containers:
+      - env:
+        - name: AWS_REGION
+          value: SQS REGION
+        - name: SQS_URL
+          value: https://sqs.REGION.amazonaws.com/ID/movies_to_parse_sandbox
+        image: ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-loader:develop
+        imagePullPolicy: ""
+        name: movies-loader
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
