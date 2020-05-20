@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+  movies-loader:
+    image: ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-loader:develop
+    environment:
+      - AWS_REGION=SQS REGION
+      - SQS_URL=https://sqs.REGION.amazonaws.com/ID/movies_to_parse_sandbox
+  
+  movies-parser:
+    image: ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-parser:develop
+    environment:
+      - AWS_REGION=SQS REGION
+      - SQS_URL=https://sqs.REGION.amazonaws.com/ID/movies_to_parse_sandbox
+      - MONGO_URI=mongodb://root:root@mongodb/watchlist?retryWrites=true&w=majority&poolSize=1
+      - MONGO_DATABASE=watchlist
+    depends_on:
+      - mongodb
+  
+  movies-store:
+    image: ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-store:develop
+    environment:
+      - MONGO_URI=mongodb://root:root@mongodb/watchlist?retryWrites=true&w=majority&poolSize=1
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongodb
+
+  movies-marketplace:
+    image: ID.dkr.ecr.REGION.amazonaws.com/mlabouardy/movies-marketplace:develop
+    ports:
+      - 80:80
+
+  mongodb:
+    image: bitnami/mongodb:latest
+    environment:
+      - MONGODB_USERNAME=root
+      - MONGODB_PASSWORD=root
+      - MONGODB_DATABASE=watchlist
