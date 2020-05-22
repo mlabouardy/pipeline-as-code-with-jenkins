@@ -1,4 +1,4 @@
-def imageName = 'mlabouardy/movies-marketplace'
+def imageName = 'mlabouardy/movies-parser'
 def registry = '305929695733.dkr.ecr.eu-west-3.amazonaws.com'
 def region = 'eu-west-3'
 
@@ -11,74 +11,72 @@ node('workers'){
 
         def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
 
-        stage('Quality Tests'){
-            sh "docker run --rm ${imageName}-test npm run lint"
-        }
-
-        stage('Unit Tests'){
-            sh "docker run --rm -v $PWD/coverage:/app/coverage ${imageName}-test npm run test"
-            publishHTML (target: [
-                allowMissing: false,
-                alwaysLinkToLastBuild: false,
-                keepAll: true,
-                reportDir: "$PWD/coverage/marketplace",
-                reportFiles: "index.html",
-                reportName: "Coverage Report"
-            ])
-        }
-
-        stage('Static Code Analysis'){
-            withSonarQubeEnv('sonarqube') {
-                sh 'sonar-scanner'
-            }
-        }
-
-        stage("Quality Gate"){
-            timeout(time: 5, unit: 'MINUTES') {
-                def qg = waitForQualityGate()
-                if (qg.status != 'OK') {
-                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+        stage('Pre-integration Tests'){
+            parallel(
+                'Quality Tests': {
+                    imageTest.inside{
+                        sh 'golint'
+                    }
+                },
+                'Unit Tests': {
+                    imageTest.inside{
+                        sh 'go test'
+                    }
+                },
+                'Security Tests': {
+                    imageTest.inside('-u root:root'){
+                        sh 'nancy /go/src/github/mlabouardy/movies-parser/Gopkg.lock'
+                    }
                 }
-            }
+            )
         }
 
         stage('Build'){
-            switch(env.BRANCH_NAME){
-                case 'develop':
-                    docker.build(imageName, '--build-arg ENVIRONMENT=sandbox .')
-                    break
-                case 'preprod':
-                    docker.build(imageName, '--build-arg ENVIRONMENT=staging .')
-                    break
-                case 'master':
-                    docker.build(imageName, '--build-arg ENVIRONMENT=production .')
-                    break
-                default:
+            parallel(
+                'Docker Image': {
                     docker.build(imageName)
-            }
+                },
+                'Helm Chart': {
+                    sh 'helm package chart'
+                }
+            )
         }
 
         stage('Push'){
-            sh "\$(aws ecr get-login --no-include-email --region ${region}) || true"
-            docker.withRegistry("https://${registry}") {
-                docker.image(imageName).push(commitID())
+            parallel(
+                'Docker Image': {
+                    sh "\$(aws ecr get-login --no-include-email --region ${region}) || true"
+                    docker.withRegistry("https://${registry}") {
+                        docker.image(imageName).push(commitID())
 
-                if (env.BRANCH_NAME == 'develop') {
-                    docker.image(imageName).push('develop')
-                }
+                        if (env.BRANCH_NAME == 'develop') {
+                            docker.image(imageName).push('develop')
+                        }
 
-                if (env.BRANCH_NAME == 'preprod') {
-                    docker.image(imageName).push('preprod')
-                }
+                        if (env.BRANCH_NAME == 'preprod') {
+                            docker.image(imageName).push('preprod')
+                        }
 
-                if (env.BRANCH_NAME == 'master') {
-                    docker.image(imageName).push('latest')
+                        if (env.BRANCH_NAME == 'master') {
+                            docker.image(imageName).push('latest')
+                        }
+                    }
+                },
+                'Helm Chart': {
+                    sh 'helm repo index --url https://mlabouardy.github.io/watchlist-charts/ .'
+                    sshagent(['github-ssh']) {
+                        sh 'git clone git@github.com:mlabouardy/watchlist-charts.git'
+                        sh 'mv movies-parser-1.0.0.tgz watchlist-charts'
+                        dir('watchlist-charts'){
+                            sh 'git add index.yaml movies-parser-1.0.0.tgz && git commit -m "movies-parser" && git push origin master'
+                        }
+                    }
                 }
-            }
+            )
         }
 
         stage('Analyze'){
-            def scannedImage = "${registry}/${imageName}:${commitID()} ${workspace}/Dockerfile"
+            def scannedImage = "${registry}/${imageName}:${commitID()}"
             writeFile file: 'images', text: scannedImage
             anchore name: 'images'
         }

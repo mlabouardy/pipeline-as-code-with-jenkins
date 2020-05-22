@@ -1,0 +1,34 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: movies-store
+  namespace: {{ .Values.namespace }}
+  labels: 
+    app: movies-store
+    tier: backend 
+spec:
+  selector: 
+    matchLabels: 
+      app: movies-store
+  template: 
+    metadata: 
+      name: movies-store
+      labels: 
+        app: movies-store
+        tier: backend 
+      annotations:
+        jenkins/build: {{ .Values.metadata.jenkins.buildTag | quote }}
+        git/commitId: {{ .Values.metadata.git.commitId | quote }}
+    spec:
+      containers: 
+        - name: movies-store
+          image: "{{ .Values.services.registry.uri }}/mlabouardy/movies-store:{{ .Values.deployment.tag }}"
+          imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: {{ .Values.namespace }}-secrets
+          {{- if .Values.services.registry.secret }}
+          imagePullSecrets:
+          - name: {{ .Values.services.registry.secret }}
+          {{- end }}
+          

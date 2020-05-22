@@ -4,7 +4,7 @@
 *.lock.info
 variables.tfvars
 *.lock.info
-
+values.override.yaml
 # python
 test_main.pyc
 

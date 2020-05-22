@@ -2,8 +2,13 @@ apiVersion: v2
 name: watchlist
 description: Top 100 iMDB best movies in history
 type: application
-version: 0.1.0
-appVersion: 1.16.0
+version: 1.0.0
+appVersion: 1.0.0
 maintainers:
     - name: Mohamed Labouardy
       email: mohamed@labouardy.com
+dependencies:
+  - name: mongodb
+    version: 7.8.10
+    repository: https://charts.bitnami.com/bitnami
+    alias: mongodb
