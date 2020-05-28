@@ -1,0 +1,13 @@
+FROM golang:1.13.4
+
+ENV VERSION v0.2.0
+ENV GOCACHE /tmp
+WORKDIR /go/src/github/mlabouardy/movies-parser
+
+RUN wget https://github.com/sonatype-nexus-community/nancy/releases/download/$VERSION/nancy-linux.amd64-$VERSION -O nancy && \
+    chmod +x nancy && mv nancy /usr/local/bin/nancy
+RUN go get -u golang.org/x/lint/golint
+
+COPY . .
+
+RUN go get -v

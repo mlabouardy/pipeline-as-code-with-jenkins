@@ -7,7 +7,7 @@ variables.tfvars
 values.override.yaml
 # python
 test_main.pyc
-
+.nyc_output
 # compiled output
 dist
 tmp

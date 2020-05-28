@@ -1,0 +1,22 @@
+{
+  "name": "movies-store",
+  "version": "1.0.0",
+  "description": "Movies store API",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/*.spec.js",
+    "lint": "eslint .",
+    "coverage": "nyc --reporter=html mocha"
+  },
+  "author": "Mohamed Labouardy",
+  "license": "ISC",
+  "devDependencies": {
+    "aws-sdk": "^2.685.0",
+    "aws-sdk-mock": "^5.1.0",
+    "chai": "^4.2.0",
+    "fs": "0.0.1-security",
+    "mocha": "^7.2.0",
+    "nyc": "^15.0.1",
+    "eslint": "^6.8.0"
+  }
+}

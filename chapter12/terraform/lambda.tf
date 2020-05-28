@@ -1,8 +1,11 @@
 module "MoviesLoader" {
   source = "./modules/function"
   name = "MoviesLoader"
-  handler = "main.py"
+  handler = "index.handler"
   runtime = "python3.7"
+  environment = {
+    SQS_URL = aws_sqs_queue.queue.id
+  }
 }
 
 module "MoviesParser" {
@@ -10,32 +13,47 @@ module "MoviesParser" {
   name = "MoviesParser"
   handler = "main"
   runtime = "go1.x"
+  environment = {
+    TABLE_NAME = aws_dynamodb_table.movies.id
+  }
 }
 
 module "MoviesStoreListMovies" {
   source = "./modules/function"
   name = "MoviesStoreListMovies"
-  handler = "index.js"
+  handler = "src/movies/findAll/index.handler"
   runtime = "nodejs12.x"
+  environment = {
+    TABLE_NAME = aws_dynamodb_table.movies.id
+  }
 }
 
 module "MoviesStoreSearchMovie" {
   source = "./modules/function"
   name = "MoviesStoreSearchMovie"
-  handler = "index.js"
+  handler = "src/movies/findOne/index.handler"
   runtime = "nodejs12.x"
+  environment = {
+    TABLE_NAME = aws_dynamodb_table.movies.id
+  }
 }
 
 module "MoviesStoreViewFavorites" {
   source = "./modules/function"
   name = "MoviesStoreViewFavorites"
-  handler = "index.js"
+  handler = "src/favorites/findAll/index.handler"
   runtime = "nodejs12.x"
+  environment = {
+    TABLE_NAME = aws_dynamodb_table.favorites.id
+  }
 }
 
 module "MoviesStoreAddToFavorites" {
   source = "./modules/function"
   name = "MoviesStoreAddToFavorites"
-  handler = "index.js"
+  handler = "src/favorites/insert/index.handler"
   runtime = "nodejs12.x"
+  environment = {
+    TABLE_NAME = aws_dynamodb_table.favorites.id
+  }
 }

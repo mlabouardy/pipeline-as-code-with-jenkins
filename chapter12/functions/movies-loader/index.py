@@ -11,7 +11,6 @@ def sendMovie(movie):
         MessageBody=(json.dumps(movie)))
     return response['MessageId']
 
-
 def handler(event, context):
     with open('movies.json') as json_file:
         data = json.load(json_file)

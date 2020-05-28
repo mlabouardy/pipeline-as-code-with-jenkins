@@ -1,0 +1,105 @@
+def functions = ['MoviesStoreListMovies', 'MoviesStoreSearchMovie', 'MoviesStoreSearchMovie', 'MoviesStoreAddToFavorites']
+def imageName = 'mlabouardy/movies-store'
+def bucket = 'deployment-packages-watchlist'
+def region = 'eu-west-3'
+
+node('workers'){
+    try {
+        stage('Checkout'){
+            checkout scm
+            notifySlack('STARTED')
+        }
+
+
+        def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
+
+        stage('Tests'){
+            parallel(
+                'Quality Tests': {
+                    sh "docker run --rm ${imageName}-test npm run lint"
+                },
+                'Unit Tests': {
+                    sh "docker run --rm ${imageName}-test npm run test"
+                },
+                'Coverage Reports': {
+                    sh "docker run --rm -v $PWD/coverage:/app/coverage ${imageName}-test npm run coverage"
+                    publishHTML (target: [
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: "$PWD/coverage",
+                        reportFiles: "index.html",
+                        reportName: "Coverage Report"
+                    ])
+                }
+            )
+        }
+
+        stage('Build'){
+            docker.build(imageName)
+            
+            sh """
+                docker run --rm ${imageName}
+                docker cp ${imageName}:/app/node_modules node_modules
+                zip -r ${commitID}.zip src
+            """
+        }
+
+        stage('Push'){
+            functions.each { function ->
+                sh "aws s3 cp ${commitId}.zip s3://${bucket}/${function}/"
+            }
+        }
+
+        stage('Deploy'){
+            functions.each { function ->
+                sh "aws lambda update-function-code --function-name ${functionName} --s3-bucket ${bucket} --s3-key ${function}/${commitId}.zip --region ${region}"
+            }
+        }
+    } catch(e){
+        currentBuild.result = 'FAILED'
+        throw e
+    } finally {
+        notifySlack(currentBuild.result)
+        sh "rm ${commitId}.zip"
+    }
+}
+
+def notifySlack(String buildStatus){
+    buildStatus =  buildStatus ?: 'SUCCESSFUL'
+    def colorCode = '#FF0000'
+    def subject = "Name: '${env.JOB_NAME}'\nStatus: ${buildStatus}\nBuild ID: ${env.BUILD_NUMBER}"
+    def summary = "${subject}\nMessage: ${commitMessage()}\nAuthor: ${commitAuthor()}\nURL: ${env.BUILD_URL}"
+
+    if (buildStatus == 'STARTED') {
+        colorCode = '#546e7a'
+    } else if (buildStatus == 'SUCCESSFUL') {
+        colorCode = '#2e7d32'
+    } else {
+        colorCode = '#c62828c'
+    }
+
+    slackSend (color: colorCode, message: summary)
+}
+
+
+def commitAuthor(){
+    sh 'git show -s --pretty=%an > .git/commitAuthor'
+    def commitAuthor = readFile('.git/commitAuthor').trim()
+    sh 'rm .git/commitAuthor'
+    commitAuthor
+}
+
+def commitID() {
+    sh 'git rev-parse HEAD > .git/commitID'
+    def commitID = readFile('.git/commitID').trim()
+    sh 'rm .git/commitID'
+    commitID
+}
+
+def commitMessage() {
+    sh 'git log --format=%B -n 1 HEAD > .git/commitMessage'
+    def commitMessage = readFile('.git/commitMessage').trim()
+    sh 'rm .git/commitMessage'
+    commitMessage
+}

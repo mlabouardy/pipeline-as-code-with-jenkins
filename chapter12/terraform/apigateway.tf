@@ -3,42 +3,63 @@ resource "aws_api_gateway_rest_api" "api" {
   description = "Watchlist Store RESTful API"
 }
 
- resource "aws_api_gateway_resource" "proxy" {
+resource "aws_api_gateway_resource" "path_movies" {
    rest_api_id = aws_api_gateway_rest_api.api.id
    parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-   path_part   = "{proxy+}"
+   path_part   = "movies"
 }
+
+resource "aws_api_gateway_resource" "path_search_movie" {
+   rest_api_id = aws_api_gateway_rest_api.api.id
+   parent_id   = aws_api_gateway_resource.path_movies.id
+   path_part   = "{name}"
+}
+
+resource "aws_api_gateway_resource" "favorites" {
+   rest_api_id = aws_api_gateway_rest_api.api.id
+   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
+   path_part   = "favorites"
+}
+
 
 module "GetMovies" {
   source = "./modules/method"
   api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.proxy.id
+  resource_id = aws_api_gateway_resource.path_movies.id
   method = "GET"
-  lambda_arn = aws_lambda_function.MoviesStoreListMovies.arn
+  lambda_arn = module.MoviesStoreListMovies.arn
+  invoke_arn = module.MoviesStoreListMovies.invoke_arn
+  api_execution_arn = aws_api_gateway_rest_api.api.execution_arn
 }
 
 module "GetOneMovie" {
   source = "./modules/method"
   api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.proxy.id
+  resource_id = aws_api_gateway_resource.path_search_movie.id
   method = "GET"
-  lambda_arn = aws_lambda_function.MoviesStoreSearchMovie.arn
+  lambda_arn = module.MoviesStoreSearchMovie.arn
+  invoke_arn = module.MoviesStoreSearchMovie.invoke_arn
+  api_execution_arn = aws_api_gateway_rest_api.api.execution_arn
 }
 
 module "GetFavorites" {
   source = "./modules/method"
   api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.proxy.id
+  resource_id = aws_api_gateway_resource.favorites.id
   method = "GET"
-  lambda_arn = aws_lambda_function.MoviesStoreViewFavorites.arn
+  lambda_arn = module.MoviesStoreViewFavorites.arn
+  invoke_arn = module.MoviesStoreViewFavorites.invoke_arn
+  api_execution_arn = aws_api_gateway_rest_api.api.execution_arn
 }
 
 module "PostFavorites" {
   source = "./modules/method"
   api_id = aws_api_gateway_rest_api.api.id
-  resource_id = aws_api_gateway_resource.proxy.id
+  resource_id = aws_api_gateway_resource.favorites.id
   method = "POST"
-  lambda_arn = aws_lambda_function.MoviesStoreAddToFavorites.arn
+  lambda_arn = module.MoviesStoreAddToFavorites.arn
+  invoke_arn = module.MoviesStoreAddToFavorites.invoke_arn
+  api_execution_arn = aws_api_gateway_rest_api.api.execution_arn
 }
 
 resource "aws_api_gateway_deployment" "test" {

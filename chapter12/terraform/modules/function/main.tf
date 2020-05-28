@@ -26,9 +26,15 @@ resource "aws_lambda_function" "lambda" {
   runtime = var.runtime
   timeout = 10
 
-  environment {
-    variables = {
-      Stack = "Watchlist"
+  dynamic "environment" {
+    for_each = var.environment == null ? [] : [var.environment]
+    content {
+      variables = var.environment
     }
   }
+
+  tags = {
+    Stack = "Watchlist"
+  }
 }
+
