@@ -10,7 +10,6 @@ node('workers'){
             notifySlack('STARTED')
         }
 
-
         def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
 
         stage('Tests'){
@@ -36,24 +35,34 @@ node('workers'){
         }
 
         stage('Build'){
-            docker.build(imageName)
-            
             sh """
-                docker run --rm ${imageName}
-                docker cp ${imageName}:/app/node_modules node_modules
-                zip -r ${commitID}.zip src
+                docker build -t ${imageName} .
+                containerName=\$(docker run -d ${imageName})
+                docker cp \$containerName:/app/node_modules node_modules
+                docker rm -f \$containerName
+                zip -r ${commitID()}.zip node_modules src
             """
         }
 
         stage('Push'){
             functions.each { function ->
-                sh "aws s3 cp ${commitId}.zip s3://${bucket}/${function}/"
+                sh "aws s3 cp ${commitID()}.zip s3://${bucket}/${function}/"
             }
+            /*
+            def fileName = commitID()
+            def parallelStagesMap = functions.collectEntries {
+                ["${it}" : {
+                    stage("Lambda: ${it}") {
+                        sh "aws s3 cp ${fileName}.zip s3://${bucket}/${it}/"
+                    }
+                }]
+            }
+            parallel parallelStagesMap*/
         }
 
         stage('Deploy'){
             functions.each { function ->
-                sh "aws lambda update-function-code --function-name ${functionName} --s3-bucket ${bucket} --s3-key ${function}/${commitId}.zip --region ${region}"
+                sh "aws lambda update-function-code --function-name ${functionName} --s3-bucket ${bucket} --s3-key ${function}/${commitID()}.zip --region ${region}"
             }
         }
     } catch(e){
@@ -61,7 +70,7 @@ node('workers'){
         throw e
     } finally {
         notifySlack(currentBuild.result)
-        sh "rm ${commitId}.zip"
+        sh "rm -rf ${commitID()}.zip"
     }
 }
 

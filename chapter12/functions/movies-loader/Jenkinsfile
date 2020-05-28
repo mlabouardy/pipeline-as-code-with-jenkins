@@ -18,22 +18,22 @@ node('workers'){
         }
 
         stage('Build'){
-            sh "zip -r ${commitId}.zip index.py movies.json"
+            sh "zip -r ${commitID()}.zip index.py movies.json"
         }
 
         stage('Push'){
-            sh "aws s3 cp ${commitId}.zip s3://${bucket}/${functionName}/"
+            sh "aws s3 cp ${commitID()}.zip s3://${bucket}/${functionName}/"
         }
 
         stage('Deploy'){
-            sh "aws lambda update-function-code --function-name ${functionName} --s3-bucket ${bucket} --s3-key ${functionName}/${commitId}.zip --region ${region}"
+            sh "aws lambda update-function-code --function-name ${functionName} --s3-bucket ${bucket} --s3-key ${functionName}/${commitID()}.zip --region ${region}"
         }
     } catch(e){
         currentBuild.result = 'FAILED'
         throw e
     } finally {
         notifySlack(currentBuild.result)
-        sh "rm ${commitId}.zip"
+        sh "rm ${commitID()}.zip"
     }
 }
 
