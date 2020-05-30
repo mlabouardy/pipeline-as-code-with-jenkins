@@ -1,4 +1,5 @@
-def functions = ['MoviesStoreListMovies', 'MoviesStoreSearchMovie', 'MoviesStoreSearchMovie', 'MoviesStoreAddToFavorites']
+def functions = ['MoviesStoreListMovies', 'MoviesStoreSearchMovie', 'MoviesStoreViewFavorites', 'MoviesStoreAddToFavorites']
+def environments = ['master':'production', 'preprod':'staging', 'develop':'sandbox']
 def imageName = 'mlabouardy/movies-store'
 def bucket = 'deployment-packages-watchlist'
 def region = 'eu-west-3'
@@ -9,6 +10,7 @@ node('workers'){
             checkout scm
             notifySlack('STARTED')
         }
+
 
         def imageTest= docker.build("${imageName}-test", "-f Dockerfile.test .")
 
@@ -45,10 +47,9 @@ node('workers'){
         }
 
         stage('Push'){
-            functions.each { function ->
+            /*functions.each { function ->
                 sh "aws s3 cp ${commitID()}.zip s3://${bucket}/${function}/"
-            }
-            /*
+            }*/
             def fileName = commitID()
             def parallelStagesMap = functions.collectEntries {
                 ["${it}" : {
@@ -57,13 +58,42 @@ node('workers'){
                     }
                 }]
             }
-            parallel parallelStagesMap*/
+            parallel parallelStagesMap
         }
 
         stage('Deploy'){
-            functions.each { function ->
-                sh "aws lambda update-function-code --function-name ${functionName} --s3-bucket ${bucket} --s3-key ${function}/${commitID()}.zip --region ${region}"
+            def fileName = commitID()
+            def parallelStagesMap = functions.collectEntries {
+                ["${it}" : {
+                    stage("Lambda: ${it}") {
+                        sh "aws lambda update-function-code --function-name ${it} \
+                            --s3-bucket ${bucket} --s3-key ${it}/${fileName}.zip \
+                            --region ${region}"
+
+                        def version = sh(
+                            script: "aws lambda publish-version --function-name ${it} \
+                                         --description ${fileName} --region ${region} | jq -r '.Version'",
+                            returnStdout: true
+                        ).trim()
+
+                        if (env.BRANCH_NAME == 'preprod' || env.BRANCH_NAME == 'develop'){
+                            sh "aws lambda update-alias  --function-name ${it} \
+                                 --name ${environments[env.BRANCH_NAME]} --function-version ${version}\
+                                 --region ${region}"
+                        }
+
+                        if(env.BRANCH_NAME == 'master'){
+                            timeout(time: 2, unit: "HOURS") {
+                                input message: "Deploy to production?", ok: "Yes"
+                            }
+                            sh "aws lambda update-alias  --function-name ${it} \
+                                 --name ${environments[env.BRANCH_NAME]} --function-version ${version}\
+                                 --region ${region}"
+                        }
+                    }
+                }]
             }
+            parallel parallelStagesMap
         }
     } catch(e){
         currentBuild.result = 'FAILED'
@@ -71,7 +101,18 @@ node('workers'){
     } finally {
         notifySlack(currentBuild.result)
         sh "rm -rf ${commitID()}.zip"
+
+        if (env.BRANCH_NAME == 'master'){
+            sendEmail(currentBuild.result)
+        }
     }
+}
+
+def sendEmail(String buildStatus){
+    buildStatus =  buildStatus ?: 'SUCCESSFUL'
+    emailext body: "More info at: ${env.BUILD_URL}",
+             subject: "Name: '${env.JOB_NAME}' Status: ${buildStatus}",
+             to: '$DEFAULT_RECIPIENTS'
 }
 
 def notifySlack(String buildStatus){

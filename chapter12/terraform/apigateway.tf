@@ -73,3 +73,52 @@ resource "aws_api_gateway_deployment" "test" {
    rest_api_id = aws_api_gateway_rest_api.api.id
    stage_name  = "test"
 }
+
+resource "aws_api_gateway_deployment" "sandbox" {
+   depends_on = [
+     module.GetMovies,
+     module.GetOneMovie,
+     module.GetFavorites,
+     module.PostFavorites
+   ]
+
+   variables = {
+    "environment" = "sandbox"
+  }
+
+   rest_api_id = aws_api_gateway_rest_api.api.id
+   stage_name  = "sandbox"
+}
+
+resource "aws_api_gateway_deployment" "staging" {
+   depends_on = [
+     module.GetMovies,
+     module.GetOneMovie,
+     module.GetFavorites,
+     module.PostFavorites
+   ]
+
+   variables = {
+    "environment" = "staging"
+  }
+
+   rest_api_id = aws_api_gateway_rest_api.api.id
+   stage_name  = "staging"
+}
+
+resource "aws_api_gateway_deployment" "production" {
+   depends_on = [
+     module.GetMovies,
+     module.GetOneMovie,
+     module.GetFavorites,
+     module.PostFavorites
+   ]
+
+   variables = {
+    "environment" = "production"
+  }
+
+   rest_api_id = aws_api_gateway_rest_api.api.id
+   stage_name  = "production"
+}
+

@@ -1,0 +1,23 @@
+pipeline {
+    agent{
+        label 'workers'
+    }
+    
+    stages {
+        stage('Checkout'){
+            steps{
+                checkout scm
+            }
+        }
+        stage('Unit Tests'){}
+        stage('Build'){}
+        stage('Push'){}
+    }
+    post {
+        always {
+            if (env.BRANCH_NAME == 'master'){
+                sendEmail(currentBuild.currentResult)
+            }
+        }
+    }
+}

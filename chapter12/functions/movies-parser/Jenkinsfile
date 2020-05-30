@@ -47,7 +47,12 @@ node('workers'){
         }
 
         stage('Deploy'){
-            sh "aws lambda update-function-code --function-name ${functionName} --s3-bucket ${bucket} --s3-key ${functionName}/${commitID()}.zip --region ${region}"
+            sh "aws lambda update-function-code --function-name ${functionName} \
+                    --s3-bucket ${bucket} --s3-key ${functionName}/${commitID()}.zip \
+                    --region ${region}"
+
+            sh "aws lambda publish-version --function-name ${functionName} \
+                    --description ${commitID()} --region ${region}"
         }
     } catch(e){
         currentBuild.result = 'FAILED'
