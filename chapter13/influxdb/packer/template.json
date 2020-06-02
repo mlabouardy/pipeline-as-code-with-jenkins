@@ -1,0 +1,27 @@
+{
+    "variables" : {
+        "region" : "AWS REGION",
+        "source_ami": "AMAZON LINUX 2 AMI ID",
+        "profile": "AWS PROFILE",
+        "instance_type": "AWS INSTANCE TYPE"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "{{user `profile`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "influxdb-1.8.0",
+            "ami_description" : "Amazon Linux Image with InfluxDB"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

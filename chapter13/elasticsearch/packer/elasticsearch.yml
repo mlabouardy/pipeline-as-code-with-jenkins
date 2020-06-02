@@ -1,0 +1,21 @@
+ path.logs: /var/log/elasticsearch
+
+# Use a descriptive name for your cluster:
+ cluster.name: monitoring
+
+
+ # -------------------- Node -----------------
+# Use a descriptive name for the node:
+ node.name: ${HOSTNAME}
+
+ # -------------- Memory -------------------------
+# Lock the memory on startup:
+ bootstrap.memory_lock: true
+
+
+# -------------- Network -------------------
+ network.bind_host: 0.0.0.0
+ http.port: 9200
+ transport.host: localhost
+ transport.tcp.port: 9300
+ action.destructive_requires_name: true

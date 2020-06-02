@@ -1,0 +1,32 @@
+{
+    "variables" : {
+        "region" : "AWS REGION",
+        "source_ami": "UBUNTU SERVER 18.04 LTS ID",
+        "profile": "AWS PROFILE",
+        "instance_type": "AWS INSTANCE TYPE"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "{{user `profile`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ubuntu",
+            "ami_name" : "kibana-7.0.0",
+            "ami_description" : "Amazon Linux Image with Kibana"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "./kibana.yml",
+            "destination" : "/tmp/kibana.yml"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+# Kibana is served by a back end server. This setting specifies the port to use.
+server.port: 5601
+
+# Specifies the address to which the Kibana server will bind.
+server.host: "0.0.0.0"
+
+# The Kibana server's name.  This is used for display purposes.
+server.name: "manning"
+
+# The URL of the Elasticsearch instance to use for all your queries.
+elasticsearch.hosts: "https://elasticsearch.domain.com:443"
+
+newsfeed.enabled: false
+telemetry.optIn: false
+telemetry.enabled: false

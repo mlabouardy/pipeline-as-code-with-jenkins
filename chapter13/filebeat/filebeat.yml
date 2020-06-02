@@ -1,0 +1,21 @@
+filebeat.inputs:
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/jenkins/jenkins.log
+  fields:
+    type: jenkins
+  multiline.pattern: '[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+
+output.logstash:
+  # The Logstash hosts
+  hosts: ["https://logstash.slowcoder.com"]
+  
+processors:
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+  - add_docker_metadata: ~
+  - add_kubernetes_metadata: ~

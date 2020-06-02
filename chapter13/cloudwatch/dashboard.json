@@ -1,0 +1,77 @@
+{
+    "widgets": [
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 0,
+            "width": 24,
+            "height": 6,
+            "properties": {
+                "metrics": [
+                    [ "AWS/EC2", "CPUUtilization", "InstanceId", "i-028df42588cd8919a", { "yAxis": "left", "id": "m1" } ],
+                    [ "...", "i-04a75885117ca95b7", { "id": "m2" } ],
+                    [ "...", "i-0c97ff1fba9af2db4", { "id": "m3", "stat": "Sum" } ]
+                ],
+                "view": "timeSeries",
+                "stacked": true,
+                "region": "eu-west-3",
+                "start": "-PT15M",
+                "end": "P0D",
+                "stat": "Average",
+                "period": 300,
+                "title": "CPU Utilization"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0,
+            "y": 6,
+            "width": 15,
+            "height": 6,
+            "properties": {
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "eu-west-3",
+                "start": "-PT15M",
+                "end": "P0D",
+                "stat": "Average",
+                "period": 300,
+                "title": "Network Traffic",
+                "legend": {
+                    "position": "right"
+                },
+                "metrics": [
+                    [ "AWS/EC2", "NetworkPacketsIn", "InstanceId", "i-028df42588cd8919a" ],
+                    [ ".", "NetworkPacketsOut", ".", "." ],
+                    [ ".", "NetworkPacketsIn", ".", "i-04a75885117ca95b7" ],
+                    [ ".", "NetworkPacketsOut", ".", "." ],
+                    [ ".", "NetworkPacketsIn", ".", "i-0c97ff1fba9af2db4" ],
+                    [ ".", "NetworkPacketsOut", ".", "." ]
+                ]
+            }
+        },
+        {
+            "type": "metric",
+            "x": 15,
+            "y": 6,
+            "width": 9,
+            "height": 3,
+            "properties": {
+                "view": "singleValue",
+                "stacked": false,
+                "region": "eu-west-3",
+                "start": "-PT15M",
+                "end": "P0D",
+                "stat": "Average",
+                "period": 300,
+                "title": "Workers CPU",
+                "legend": {
+                    "position": "right"
+                },
+                "metrics": [
+                    [ "AWS/EC2", "CPUUtilization", "AutoScalingGroupName", "jenkins_workers_asg" ]
+                ]
+            }
+        }
+    ]
+}

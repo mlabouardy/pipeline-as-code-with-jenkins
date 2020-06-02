@@ -1,0 +1,32 @@
+{
+    "variables" : {
+        "region" : "AWS REGION",
+        "source_ami": "AMAZON LINUX 2 AMI ID",
+        "profile": "AWS PROFILE",
+        "instance_type": "AWS INSTANCE TYPE"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "{{user `profile`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ec2-user",
+            "ami_name" : "grafana-7.0.1",
+            "ami_description" : "Amazon Linux Image with Grafana"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "./grafana.ini",
+            "destination" : "/tmp/grafana.ini"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

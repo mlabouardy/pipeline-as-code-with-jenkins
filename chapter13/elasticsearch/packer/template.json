@@ -1,0 +1,32 @@
+{
+    "variables" : {
+        "region" : "AWS REGION",
+        "source_ami": "UBUNTU SERVER 18.04 LTS ID",
+        "profile": "AWS PROFILE",
+        "instance_type": "AWS INSTANCE TYPE"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "{{user `profile`}}",
+            "region" : "{{user `region`}}",
+            "instance_type" : "{{user `instance_type`}}",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ubuntu",
+            "ami_name" : "elasticsearch-7.0.0",
+            "ami_description" : "Amazon Linux Image with Elasticsearch"
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "file",
+            "source" : "./elasticsearch.yml",
+            "destination" : "/tmp/elasticsearch.yml"
+        },
+        {
+            "type" : "shell",
+            "script" : "./setup.sh",
+            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}
