@@ -1,0 +1,14 @@
+pipeline{
+    agent{
+        label 'workers'
+    }
+    Stages{
+       stage('Checkout'){}
+    }
+}
+
+// 
+
+node('workers'){
+    stage('Checkout'){}
+}
