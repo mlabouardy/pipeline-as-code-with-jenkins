@@ -14,7 +14,7 @@
             "source_image_family": "centos-8",
             "ssh_username": "packer",
             "zone": "{{user `zone`}}"
-          }
+        }
     ],
     "provisioners" : [
         {
