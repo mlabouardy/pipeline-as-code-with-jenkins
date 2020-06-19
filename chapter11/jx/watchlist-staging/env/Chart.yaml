@@ -1,0 +1,6 @@
+description: GitOps Environment for this Environment
+icon: https://www.cloudbees.com/sites/default/files/Jenkins_8.png
+maintainers:
+- name: Team
+name: env
+version: 0.0.1

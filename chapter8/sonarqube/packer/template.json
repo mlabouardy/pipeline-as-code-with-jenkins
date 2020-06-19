@@ -2,7 +2,7 @@
     "variables" : {
         "region" : "AWS REGION",
         "aws_profile": "AWS PROFILE ID",
-        "source_ami" : "UBUNTU SERVER 18.04 IMAGE ID",
+        "source_ami" : "Amazon Linux AMI 2 ID",
         "instance_type": "EC2 INSTANCE TYPE"
     },
     "builders" : [

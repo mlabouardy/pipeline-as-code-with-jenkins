@@ -6,16 +6,17 @@ SONAR_DB_PASS=sonar
 SONAR_VERSION=sonarqube-8.2.0.32929
 
 # Install Java
-apt-get update
-apt install -y openjdk-11-jdk
+yum update
+yum remove -y java
+yum install -y java-1.8.0-openjdk
 
 # Install PostgreSQL
-apt-get install -y unzip curl
-sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
-wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | sudo apt-key add -
-apt-get install -y postgresql postgresql-contrib
-systemctl start postgresql
+yum install -y unzip curl
+amazon-linux-extras install -y postgresql10 vim epel
+yum install -y postgresql-server postgresql-devel
+/usr/bin/postgresql-setup --initdb
 systemctl enable postgresql
+systemctl start postgresql
 
 # Create database & credentials for SonarQube
 cat > /tmp/db.sql <<EOF
@@ -47,5 +48,5 @@ chown -R sonar:sonar /opt/sonarqube
 ln -sf /opt/sonarqube/bin/linux-x86-64/sonar.sh /usr/bin/sonar
 cp /tmp/sonar.init.d /etc/init.d/sonar
 chmod 755 /etc/init.d/sonar
-update-rc.d sonar defaults
+chkconfig --add sonar
 service sonar start
