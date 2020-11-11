@@ -11,7 +11,7 @@ data "aws_ami" "jenkins-worker" {
 
 // Jenkins workers user data
 data "template_file" "user_data_jenkins_worker" {
-  template = "${file("scripts/join-cluster.tpl")}"
+  template = file("scripts/join-cluster.tpl")
 
   vars = {
     jenkins_url            = "http://${aws_instance.jenkins_master.private_ip}:8080"

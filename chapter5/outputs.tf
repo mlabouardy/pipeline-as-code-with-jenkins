@@ -1,9 +1,9 @@
 output "bastion" {
-  value = "${aws_instance.bastion.public_ip}"
+  value = aws_instance.bastion.public_ip
 }
 
 output "jenkins-master-elb" {
-  value = "${aws_elb.jenkins_elb.dns_name}"
+  value = aws_elb.jenkins_elb.dns_name
 }
 
 output "jenkins-dns" {
