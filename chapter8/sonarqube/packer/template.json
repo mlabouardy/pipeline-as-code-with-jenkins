@@ -1,32 +1,32 @@
 {
-    "variables" : {
-        "region" : "AWS REGION",
+    "variables": {
+        "region": "AWS REGION",
         "aws_profile": "AWS PROFILE ID",
-        "source_ami" : "Amazon Linux AMI 2 ID",
+        "source_ami": "Amazon Linux AMI 2 ID",
         "instance_type": "EC2 INSTANCE TYPE"
     },
-    "builders" : [
+    "builders": [
         {
-            "type" : "amazon-ebs",
-            "profile" : "{{user `aws_profile`}}",
-            "region" : "{{user `region`}}",
-            "instance_type" : "{{user `instance_type`}}",
-            "source_ami" : "{{user `source_ami`}}",
-            "ssh_username" : "ubuntu",
-            "ami_name" : "sonarqube-8.2.0.32929",
-            "ami_description" : "SonarQube community edition"
+            "type": "amazon-ebs",
+            "profile": "{{user `aws_profile`}}",
+            "region": "{{user `region`}}",
+            "instance_type": "{{user `instance_type`}}",
+            "source_ami": "{{user `source_ami`}}",
+            "ssh_username": "ubuntu",
+            "ami_name": "sonarqube-8.2.0.32929",
+            "ami_description": "SonarQube community edition"
         }
     ],
-    "provisioners" : [
+    "provisioners": [
         {
-            "type" : "file",
-            "source" : "sonar.init.d",
-            "destination" : "/tmp/"
+            "type": "file",
+            "source": "sonar.init.d",
+            "destination": "/tmp/"
         },
         {
-            "type" : "shell",
-            "script" : "./setup.sh",
-            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+            "type": "shell",
+            "script": "./setup.sh",
+            "execute_command": "sudo -E -S sh '{{ .Path }}'"
         }
     ]
 }

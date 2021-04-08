@@ -3,7 +3,7 @@ resource "aws_security_group" "elb_sonarqube_sg" {
   name        = "elb_sonarqube_sg"
   description = "Allow http & https traffic"
   vpc_id      = var.vpc_id
-  
+
   ingress {
     from_port   = "80"
     to_port     = "80"
@@ -39,7 +39,7 @@ resource "aws_elb" "sonarqube_elb" {
   instances                 = [aws_instance.sonarqube.id]
 
   listener {
-    instance_port      = 8080
+    instance_port      = 9000
     instance_protocol  = "http"
     lb_port            = 443
     lb_protocol        = "https"
@@ -47,10 +47,10 @@ resource "aws_elb" "sonarqube_elb" {
   }
 
   listener {
-    instance_port      = 8080
-    instance_protocol  = "http"
-    lb_port            = 80
-    lb_protocol        = "http"
+    instance_port     = 9000
+    instance_protocol = "http"
+    lb_port           = 80
+    lb_protocol       = "http"
 
   }
 
@@ -58,7 +58,7 @@ resource "aws_elb" "sonarqube_elb" {
     healthy_threshold   = 2
     unhealthy_threshold = 2
     timeout             = 3
-    target              = "TCP:8080"
+    target              = "TCP:9000"
     interval            = 5
   }
 
