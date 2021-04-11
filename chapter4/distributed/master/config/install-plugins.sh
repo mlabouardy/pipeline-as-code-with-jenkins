@@ -24,7 +24,7 @@ installPlugin() {
 while read -r plugin
 do
     installPlugin "$plugin"
-done < "/tmp/plugins.txt"
+done < "/tmp/config/plugins.txt"
 
 changed=1
 maxloops=100
