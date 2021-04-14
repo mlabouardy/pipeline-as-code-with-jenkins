@@ -1,9 +1,9 @@
 // Swarm managers resource template
 data "template_file" "swarm_manager_user_data" {
-  template = "${file("scripts/join-swarm.tpl")}"
+  template = file("scripts/join-swarm.tpl")
 
   vars = {
-    swarm_discovery_bucket = "${var.swarm_discovery_bucket}"
+    swarm_discovery_bucket = var.swarm_discovery_bucket
     swarm_name             = var.environment
     swarm_role             = "manager"
   }
@@ -106,7 +106,7 @@ resource "aws_cloudwatch_metric_alarm" "low_cpu_swarm_managers" {
   }
 
   alarm_description = "This metric monitors ec2 cpu utilization"
-  alarm_actions     = ["${aws_autoscaling_policy.scale_in_swarm_managers.arn}"]
+  alarm_actions     = [aws_autoscaling_policy.scale_in_swarm_managers.arn]
 }
 
 resource "aws_autoscaling_policy" "scale_in_swarm_managers" {

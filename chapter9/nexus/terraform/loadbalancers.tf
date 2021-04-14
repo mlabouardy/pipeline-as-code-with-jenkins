@@ -1,6 +1,6 @@
 // Nexus Dashboard ELB
 resource "aws_elb" "nexus_elb" {
-  subnets                   = var.public_subnets
+  subnets                   = [for subnet in aws_subnet.public_subnets : subnet.id]
   cross_zone_load_balancing = true
   security_groups           = [aws_security_group.elb_nexus_sg.id]
   instances                 = [aws_instance.nexus.id]
@@ -29,7 +29,7 @@ resource "aws_elb" "nexus_elb" {
 
 // Registry ELB
 resource "aws_elb" "registry_elb" {
-  subnets                   = var.public_subnets
+  subnets                   = [for subnet in aws_subnet.public_subnets : subnet.id]
   cross_zone_load_balancing = true
   security_groups           = [aws_security_group.elb_registry_sg.id]
   instances                 = [aws_instance.nexus.id]

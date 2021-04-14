@@ -20,13 +20,13 @@
     "provisioners" : [
         {
             "type" : "file",
-            "source" : "./promtheus.service",
-            "destination" : "/tmp/promtheus.service"
+            "source" : "./prometheus.service",
+            "destination" : "/tmp/prometheus.service"
         },
         {
             "type" : "file",
-            "source" : "./promtheus.yml",
-            "destination" : "/tmp/promtheus.yml"
+            "source" : "./prometheus.yml",
+            "destination" : "/tmp/prometheus.yml"
         },
         {
             "type" : "shell",

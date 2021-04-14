@@ -1,6 +1,6 @@
 // elasticsearch ELB
 resource "aws_elb" "elasticsearch_elb" {
-  subnets                   = var.public_subnets
+  subnets                   = [for subnet in aws_subnet.public_subnets : subnet.id]
   cross_zone_load_balancing = true
   security_groups           = [aws_security_group.elb_elasticsearch_sg.id]
   instances                 = [aws_instance.elasticsearch.id]

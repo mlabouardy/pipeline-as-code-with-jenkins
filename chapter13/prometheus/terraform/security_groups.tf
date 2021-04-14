@@ -1,7 +1,7 @@
 resource "aws_security_group" "elb_prometheus_sg" {
   name        = "elb_prometheus_sg"
   description = "Allow https traffic"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.management.id
 
   ingress {
     from_port   = "443"
@@ -26,13 +26,13 @@ resource "aws_security_group" "elb_prometheus_sg" {
 resource "aws_security_group" "prometheus_sg" {
   name        = "prometheus_sg"
   description = "Allow traffic on port 9090 and enable SSH from bastion host"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.management.id
 
   ingress {
     from_port       = "22"
     to_port         = "22"
     protocol        = "tcp"
-    security_groups = [var.bastion_sg_id]
+    security_groups = [aws_security_group.bastion_host.id]
   }
 
   ingress {
