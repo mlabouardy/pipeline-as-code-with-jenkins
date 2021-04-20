@@ -12,7 +12,7 @@
             "region": "{{user `region`}}",
             "instance_type": "{{user `instance_type`}}",
             "source_ami": "{{user `source_ami`}}",
-            "ssh_username": "ubuntu",
+            "ssh_username": "ec2-user",
             "ami_name": "sonarqube-8.2.0.32929",
             "ami_description": "SonarQube community edition"
         }

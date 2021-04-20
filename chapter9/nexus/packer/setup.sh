@@ -2,7 +2,6 @@
 
 NEXUS_USERNAME="admin"
 NEXUS_PASSWORD="admin123"
-NEXUS_VERSION="nexus-3.22.1-02"
 
 echo "Install Java JDK 8"
 yum update -y
@@ -11,7 +10,7 @@ yum install -y java-1.8.0-openjdk
 echo "Install Nexus OSS"
 wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz -P /tmp
 tar -xvf /tmp/latest-unix.tar.gz
-mv $NEXUS_VERSION /opt/nexus
+mv nexus-* /opt/nexus
 mv sonatype-work /opt/sonatype-work
 useradd nexus
 chown -R nexus:nexus /opt/nexus/ /opt/sonatype-work/

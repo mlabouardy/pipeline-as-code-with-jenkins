@@ -12,4 +12,4 @@ RUN add-apt-repository \
        $(lsb_release -cs) stable"
 RUN apt-get update && apt-get install -y docker-ce-cli
 USER jenkins
-RUN jenkins-plugin-cli --plugins blueocean:1.24.3 workflow-aggregator:2.6 github:1.32.0 docker-plugin:1.2.1
+RUN jenkins-plugin-cli --plugins blueocean:1.24.3 workflow-aggregator:2.6 github:1.33.1 docker-plugin:1.2.1

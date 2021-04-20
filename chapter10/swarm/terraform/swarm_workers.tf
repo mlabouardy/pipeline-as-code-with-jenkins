@@ -105,7 +105,7 @@ resource "aws_cloudwatch_metric_alarm" "low_cpu_swarm_workers" {
   }
 
   alarm_description = "This metric monitors ec2 cpu utilization"
-  alarm_actions     = ["${aws_autoscaling_policy.scale_in_swarm_workers.arn}"]
+  alarm_actions     = [aws_autoscaling_policy.scale_in_swarm_workers.arn]
 }
 
 resource "aws_autoscaling_policy" "scale_in_swarm_workers" {

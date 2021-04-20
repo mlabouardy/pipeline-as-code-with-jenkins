@@ -11,9 +11,9 @@ data "aws_ami" "prometheus" {
 resource "aws_instance" "prometheus" {
   ami                    = data.aws_ami.prometheus.id
   instance_type          = var.prometheus_instance_type
-  key_name               = var.key_name
+  key_name               = aws_key_pair.management.id
   vpc_security_group_ids = [aws_security_group.prometheus_sg.id]
-  subnet_id              = element(var.private_subnets, 0)
+  subnet_id              = element(aws_subnet.private_subnets, 0).id
 
   root_block_device {
     volume_type           = "gp2"

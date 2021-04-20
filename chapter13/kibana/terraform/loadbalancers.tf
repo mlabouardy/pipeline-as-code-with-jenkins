@@ -1,6 +1,6 @@
 // kibana ELB
 resource "aws_elb" "kibana_elb" {
-  subnets                   = var.public_subnets
+  subnets                   = [for subnet in aws_subnet.public_subnets : subnet.id]
   cross_zone_load_balancing = true
   security_groups           = [aws_security_group.elb_kibana_sg.id]
   instances                 = [aws_instance.kibana.id]
