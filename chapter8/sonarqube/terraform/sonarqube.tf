@@ -11,13 +11,13 @@ data "aws_ami" "sonarqube" {
 resource "aws_security_group" "sonarqube_sg" {
   name        = "sonarqube_sg"
   description = "Allow traffic on port 9000 and enable SSH from bastion host"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.management.id
 
   ingress {
     from_port       = "22"
     to_port         = "22"
     protocol        = "tcp"
-    security_groups = [var.bastion_sg_id]
+    security_groups = [aws_security_group.bastion_host.id]
   }
 
   ingress {
@@ -43,9 +43,9 @@ resource "aws_security_group" "sonarqube_sg" {
 resource "aws_instance" "sonarqube" {
   ami                    = data.aws_ami.sonarqube.id
   instance_type          = var.sonarqube_instance_type
-  key_name               = var.key_name
+  key_name               = aws_key_pair.management.id
   vpc_security_group_ids = [aws_security_group.sonarqube_sg.id]
-  subnet_id              = element(var.private_subnets, 0)
+  subnet_id              = element(aws_subnet.private_subnets, 0).id
 
   root_block_device {
     volume_type           = "gp2"

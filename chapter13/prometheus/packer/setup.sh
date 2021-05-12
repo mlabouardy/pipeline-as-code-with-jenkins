@@ -20,4 +20,5 @@ mv /tmp/prometheus.yml /etc/prometheus/prometheus.yml
 chown -R prometheus:prometheus /etc/prometheus/prometheus.yml
 mv /tmp/prometheus.service /etc/systemd/system/prometheus.service
 systemctl daemon-reload
+systemctl enable prometheus
 systemctl start prometheus

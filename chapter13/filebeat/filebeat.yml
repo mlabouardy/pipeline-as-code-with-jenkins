@@ -12,7 +12,7 @@ filebeat.inputs:
 
 output.logstash:
   # The Logstash hosts
-  hosts: ["https://logstash.slowcoder.com"]
+  hosts: ["LOGSTASH_HOST"]
   
 processors:
   - add_host_metadata: ~

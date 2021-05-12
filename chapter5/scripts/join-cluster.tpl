@@ -3,12 +3,13 @@
 JENKINS_URL="${jenkins_url}"
 JENKINS_USERNAME="${jenkins_username}"
 JENKINS_PASSWORD="${jenkins_password}"
-TOKEN=$(curl -u $JENKINS_USERNAME:$JENKINS_PASSWORD ''$JENKINS_URL'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
+COOKIEJAR="$(mktemp)"
+TOKEN=$(curl -u $JENKINS_USERNAME:$JENKINS_PASSWORD --cookie-jar "$COOKIEJAR" ''$JENKINS_URL'/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)')
 INSTANCE_NAME=$(curl -s 169.254.169.254/latest/meta-data/local-hostname)
 INSTANCE_IP=$(curl -s 169.254.169.254/latest/meta-data/local-ipv4)
 JENKINS_CREDENTIALS_ID="${jenkins_credentials_id}"
 
-curl -v -u $JENKINS_USERNAME:$JENKINS_PASSWORD -H "Jenkins-Crumb:$TOKEN" -d 'script=
+curl -v -u $JENKINS_USERNAME:$JENKINS_PASSWORD --cookie "$COOKIEJAR" -H "$TOKEN" -d 'script=
 import hudson.model.Node.Mode
 import hudson.slaves.*
 import jenkins.model.Jenkins
@@ -24,3 +25,5 @@ new SSHLauncher("'$INSTANCE_IP'", 22, "'$JENKINS_CREDENTIALS_ID'"),
 RetentionStrategy.INSTANCE)
 Jenkins.instance.addNode(dumb)
 ' $JENKINS_URL/script
+
+rm -rf $COOKIEJAR

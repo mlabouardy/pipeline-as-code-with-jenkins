@@ -2,7 +2,7 @@
 resource "aws_security_group" "elb_sonarqube_sg" {
   name        = "elb_sonarqube_sg"
   description = "Allow http & https traffic"
-  vpc_id      = var.vpc_id
+  vpc_id      = aws_vpc.management.id
 
   ingress {
     from_port   = "80"
@@ -33,7 +33,7 @@ resource "aws_security_group" "elb_sonarqube_sg" {
 
 // SonarQube ELB
 resource "aws_elb" "sonarqube_elb" {
-  subnets                   = var.public_subnets
+  subnets                   = [for subnet in aws_subnet.public_subnets : subnet.id]
   cross_zone_load_balancing = true
   security_groups           = [aws_security_group.elb_sonarqube_sg.id]
   instances                 = [aws_instance.sonarqube.id]
