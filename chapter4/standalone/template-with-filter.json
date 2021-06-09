@@ -1,33 +1,36 @@
 {
-    "variables" : {
-        "region" : "AWS REGION",
+    "variables": {
+        "region": "AWS REGION",
         "aws_profile": "AWS PROFILE",
         "instance_type": "INSTANCE TYPE"
     },
-    "builders" : [
+    "builders": [
         {
-            "type" : "amazon-ebs",
-            "profile" : "{{user `aws_profile`}}",
-            "region" : "{{user `region`}}",
-            "instance_type" : "{{user `instance_type`}}",
-            "ssh_username" : "ec2-user",
-            "ami_description" : "Amazon Linux Image with Jenkins Server",
+            "type": "amazon-ebs",
+            "profile": "{{user `aws_profile`}}",
+            "region": "{{user `region`}}",
+            "instance_type": "{{user `instance_type`}}",
+            "ssh_username": "ec2-user",
+            "ami_name": "jenkins-master-2.204.1",
+            "ami_description": "Amazon Linux Image with Jenkins Server",
             "source_ami_filter": {
                 "filters": {
-                  "virtualization-type": "hvm",
-                  "name": "Amazon Linux AMI-*",
-                  "root-device-type": "ebs"
+                    "virtualization-type": "hvm",
+                    "name": "Amazon Linux AMI-*",
+                    "root-device-type": "ebs"
                 },
-                "owners": ["amazon"],
+                "owners": [
+                    "amazon"
+                ],
                 "most_recent": true
             }
         }
     ],
-    "provisioners" : [
+    "provisioners": [
         {
-            "type" : "shell",
-            "script" : "./setup.sh",
-            "execute_command" : "sudo -E -S sh '{{ .Path }}'"
+            "type": "shell",
+            "script": "./setup.sh",
+            "execute_command": "sudo -E -S sh '{{ .Path }}'"
         }
     ]
 }
