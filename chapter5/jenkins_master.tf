@@ -50,7 +50,7 @@ resource "aws_instance" "jenkins_master" {
   subnet_id              = element(aws_subnet.private_subnets, 0).id
 
   root_block_device {
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     volume_size           = 30
     delete_on_termination = false
   }
