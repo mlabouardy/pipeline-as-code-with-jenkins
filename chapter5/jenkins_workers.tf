@@ -5,7 +5,7 @@ data "aws_ami" "jenkins-worker" {
 
   filter {
     name   = "name"
-    values = ["jenkins-worker"]
+    values = ["jenkins-worker*"]
   }
 }
 
