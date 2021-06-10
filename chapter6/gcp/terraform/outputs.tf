@@ -3,5 +3,5 @@ output "bastion" {
 }
 
 output "jenkins" {
-    value = "${google_compute_forwarding_rule.jenkins_master_forwarding_rule.ip_address}"
+    value = google_compute_forwarding_rule.jenkins_master_forwarding_rule.ip_address
 }
