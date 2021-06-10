@@ -1,15 +1,8 @@
-MoviesStore
-  Search movie
-     findOne
-  List movies
-     findAll
-  View movie
-     FindOne
-  Add movie to favorites
-     Insert
-  View favorites
-MoviesLoader
-  Read JSON + construct URL + push to SQS
-MoviesParser
-  Get URL + get HTML parse + save to MongoDB
-frontend
+# Distributed Web Application
+
+| Service     | Language/Framework     | Description                                                                                                                                                                                                         |
+| ----------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Loader      | Python                 | Responsible for reading a JSON file containing a list of movies and pushing each movie item to an Amazon Queue Service (SQS).                                                                                       |
+| Parser      | Golang                 | Responsible for consuming movies by subscribing to SQS and scrapping movie information from the IMDb website (https://www.imdb.com/) and storing the metadata (movie’s name, cover, description, etc) into MongoDB. |
+| Store       | Node.JS                | Responsible for serving a RESTful API with endpoints to fetch a list of movies and insert new movies into the watch list database in the MongoDB server.                                                            |
+| Marketplace | Angular and Typescript | Responsible for serving a frontend to browse movies by calling the Store RESTful API.                                                                                                                               |
