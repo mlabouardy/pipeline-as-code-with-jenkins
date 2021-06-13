@@ -19,7 +19,8 @@ chkconfig --add nexus
 chkconfig --levels 345 nexus on
 mv /tmp/nexus.rc /opt/nexus/bin/nexus.rc
 echo "nexus.scripts.allowCreation=true" >> nexus-default.properties 
-service nexus restart
+systemctl enable nexus
+systemctl start nexus
 
 until $(curl --output /dev/null --silent --head --fail http://localhost:8081); do
     printf '.'
