@@ -1,13 +1,18 @@
+def imageName = 'mlabouardy/movies-loader'
+def registry = 'https://domain.coma'
+
 pipeline{
     agent{
         label 'workers'
     }
+
     stages{
         stage('Checkout'){
             steps{
                 checkout scm
             }
         }
+
         stage('Unit Tests'){
             steps{
                 script {
@@ -18,6 +23,7 @@ pipeline{
                 }
             }
         }
+
         stage('Build'){
             steps{
                 script {
@@ -25,18 +31,24 @@ pipeline{
                 }
             }
         }
+
         stage('Push'){
             steps{
-                script {
-                    docker.withRegistry(registry, 'registry') {
+                docker.withRegistry(registry, 'registry') {
                         docker.image(imageName).push(commitID())
 
                         if (env.BRANCH_NAME == 'develop') {
                             docker.image(imageName).push('develop')
                         }
-                    }
                 }
             }
         }
     }
+}
+
+def commitID() {
+    sh 'git rev-parse HEAD > .git/commitID'
+    def commitID = readFile('.git/commitID').trim()
+    sh 'rm .git/commitID'
+    commitID
 }
