@@ -1,4 +1,5 @@
 FROM node:14.17.0
+LABEL MAINTAINER mlabouardy
 
 WORKDIR /app
 
