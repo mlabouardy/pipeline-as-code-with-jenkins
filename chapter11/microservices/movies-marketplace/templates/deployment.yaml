@@ -1,0 +1,30 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: movies-marketplace
+  namespace: {{ .Values.namespace }}
+  labels: 
+    app: movies-marketplace
+    tier: frontend 
+spec:
+  selector: 
+    matchLabels: 
+      app: movies-marketplace
+  template: 
+    metadata: 
+      name: movies-marketplace
+      labels: 
+        app: movies-marketplace
+        tier: frontend 
+      annotations:
+        jenkins/build: {{ .Values.metadata.jenkins.buildTag | quote }}
+        git/commitId: {{ .Values.metadata.git.commitId | quote }}
+    spec:
+      containers: 
+        - name: movies-marketplace
+          image: "{{ .Values.services.registry.uri }}/mlabouardy/movies-marketplace:{{ .Values.deployment.tag }}"
+          imagePullPolicy: Always
+          {{- if .Values.services.registry.secret }}
+          imagePullSecrets:
+          - name: {{ .Values.services.registry.secret }}
+          {{- end }}

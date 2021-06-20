@@ -1,0 +1,15 @@
+namespace: 'movies-marketplace'
+
+metadata: 
+  git:
+    commitId: none
+  jenkins:
+    buildTag: none
+
+services:
+  registry:
+    uri: 'ID.dkr.ecr.REGION.amazonaws.com'
+    secret: ''
+
+deployment:
+  tag: 'develop'

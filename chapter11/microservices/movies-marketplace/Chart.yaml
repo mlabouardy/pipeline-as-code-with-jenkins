@@ -1,0 +1,6 @@
+apiVersion: v2
+name: movies-marketplace
+description: UI to browse top 100 iMDB movies
+type: application
+version: 1.0.0
+appVersion: 1.0.0
