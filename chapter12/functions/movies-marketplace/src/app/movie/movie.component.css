@@ -1,0 +1,25 @@
+.badge {
+    margin-right: 3px;
+}
+
+.title{
+    font-weight: 900;
+    margin-bottom: 10px;
+    margin-top:10px;
+}
+
+.video{
+    margin-right: 10px;
+}
+
+.actions{
+    margin-bottom: 20px;
+}
+
+.details{
+    margin-bottom: 20px;
+}
+
+.similar{
+    margin-right: 5px;
+}

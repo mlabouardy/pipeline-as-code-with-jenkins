@@ -1,0 +1,27 @@
+<div class="container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a routerLink="/">Movies</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Favorites</li>
+        </ol>
+    </nav>
+    <div class="row" *ngIf="movies.length == 0">
+        <div class="col-lg-12">
+            <div class="alert alert-warning">
+                Favorites list is empty, add a new movie to the list !
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2" *ngFor="let movie of movies">
+            <div class="card">
+                <img class="card-img-top" src="{{movie.poster}}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{movie.title}}</h5>
+                    <p class="card-text">{{movie.description}}</p>
+                    <a routerLink="/movies/{{movie.id}}" class="btn btn-primary"><i class="fa fa-eye"></i> View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
