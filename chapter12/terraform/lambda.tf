@@ -22,7 +22,7 @@ module "MoviesStoreListMovies" {
   source = "./modules/function"
   name = "MoviesStoreListMovies"
   handler = "src/movies/findAll/index.handler"
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
   environment = {
     TABLE_NAME = aws_dynamodb_table.movies.id
   }
@@ -32,7 +32,7 @@ module "MoviesStoreSearchMovie" {
   source = "./modules/function"
   name = "MoviesStoreSearchMovie"
   handler = "src/movies/findOne/index.handler"
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
   environment = {
     TABLE_NAME = aws_dynamodb_table.movies.id
   }
@@ -42,7 +42,7 @@ module "MoviesStoreViewFavorites" {
   source = "./modules/function"
   name = "MoviesStoreViewFavorites"
   handler = "src/favorites/findAll/index.handler"
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
   environment = {
     TABLE_NAME = aws_dynamodb_table.favorites.id
   }
@@ -52,7 +52,7 @@ module "MoviesStoreAddToFavorites" {
   source = "./modules/function"
   name = "MoviesStoreAddToFavorites"
   handler = "src/favorites/insert/index.handler"
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
   environment = {
     TABLE_NAME = aws_dynamodb_table.favorites.id
   }
