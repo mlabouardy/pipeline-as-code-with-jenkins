@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: movies-loader
-        image: 305929695733.dkr.ecr.eu-west-3.amazonaws.com/mlabouardy/movies-loader:develop
+        image: ID.dkr.ecr.REGION.amazonaws.com/USER/movies-loader:develop
         env:
         - name: AWS_REGION
-          value: eu-west-3
+          value: REGION
         - name: SQS_URL
-          value: https://sqs.eu-west-3.amazonaws.com/305929695733/movies_to_parse_sandbox
+          value: https://sqs.REGION.amazonaws.com/USER/movies_to_parse_sandbox
