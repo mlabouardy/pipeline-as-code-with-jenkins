@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.namespace }}-movies-parser
+  namespace: {{ .Values.namespace }}
+  labels: 
+    app: {{ .Values.namespace }}-movies-parser
+data:
+  AWS_REGION: {{ .Values.services.aws.region }}
+  SQS_URL: https://sqs.{{ .Values.services.aws.region }}.amazonaws.com/{{ .Values.services.aws.account }}/movies_to_parse_{{ .Values.environment }}
