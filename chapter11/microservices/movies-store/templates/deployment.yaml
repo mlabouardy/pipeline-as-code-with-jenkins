@@ -1,0 +1,33 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: movies-loader
+  namespace: {{ .Values.namespace }}
+  labels: 
+    app: movies-loader
+    tier: backend 
+spec:
+  selector: 
+    matchLabels: 
+      app: movies-loader
+  template: 
+    metadata: 
+      name: movies-loader
+      labels: 
+        app: movies-loader
+        tier: backend 
+      annotations:
+        jenkins/build: {{ .Values.metadata.jenkins.buildTag | quote }}
+        git/commitId: {{ .Values.metadata.git.commitId | quote }}
+    spec:
+      containers: 
+        - name: movies-loader
+          image: "{{ .Values.services.registry.uri }}/mlabouardy/movies-loader:{{ .Values.deployment.tag }}" 
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.namespace }}-movies-loader
+          {{- if .Values.services.registry.secret }}
+          imagePullSecrets:
+          - name: {{ .Values.services.registry.secret }}
+          {{- end }}

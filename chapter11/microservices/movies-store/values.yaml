@@ -1,0 +1,26 @@
+namespace: 'movies-store'
+
+metadata: 
+  git:
+    commitId: none
+  jenkins:
+    buildTag: none
+
+mongodb:
+  fullnameOverride: 'mongodb'
+  mongodbRootPassword: ''
+  mongodbUsername: ''
+  mongodbDatabase: 'watchlist'
+  
+services:
+  aws:
+    account: ''
+    region: ''
+  registry:
+    uri: 'ID.dkr.ecr.REGION.amazonaws.com'
+    secret: ''
+
+deployment:
+  tag: 'develop'
+  https: 
+    ssl: ''
