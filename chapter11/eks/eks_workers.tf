@@ -32,6 +32,11 @@ resource "aws_iam_role_policy_attachment" "ecr_policy" {
   role       = aws_iam_role.worker_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "sqs_policy" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+  role       = aws_iam_role.worker_role.name
+}
+
 resource "aws_eks_node_group" "workers_node_group" {
   cluster_name    = aws_eks_cluster.sandbox.name
   node_group_name = "${var.cluster_name}-workers-node-group"
@@ -48,5 +53,6 @@ resource "aws_eks_node_group" "workers_node_group" {
     aws_iam_role_policy_attachment.worker_node_policy,
     aws_iam_role_policy_attachment.cni_policy,
     aws_iam_role_policy_attachment.ecr_policy,
+    aws_iam_role_policy_attachment.sqs_policy,
   ]
 }
