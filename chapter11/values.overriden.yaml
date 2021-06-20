@@ -1,0 +1,25 @@
+environment: 'sandbox'
+
+metadata: 
+  git:
+    commitId: '1'
+  jenkins:
+    buildTag: '1'
+
+mongodb:
+  mongodbUsername: 'watchlist'
+  mongodbPassword: 'watchlist'
+
+services:
+  aws:
+    account: 'ID'
+    region: 'REGION'
+  mongodb:
+    uri: 'mongodb://watchlist:watchlist@mongodb.default.svc.cluster.local/watchlist?retryWrites=true&w=majority&poolSize=1'
+  registry:
+    uri: 'ID.dkr.ecr.REGION.amazonaws.com'
+
+deployment:
+  tag: 'develop'
+  workers:
+    replicas: 2
