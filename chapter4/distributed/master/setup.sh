@@ -22,8 +22,8 @@ chown -R jenkins:jenkins /var/lib/jenkins/.ssh/id_rsa
 
 echo "Configure Jenkins"
 mkdir -p /var/lib/jenkins/init.groovy.d
-mv /tmp/*.groovy /var/lib/jenkins/init.groovy.d/
-mv /tmp/jenkins /etc/sysconfig/jenkins
-chmod +x /tmp/install-plugins.sh
-bash /tmp/install-plugins.sh
+mv /tmp/scripts/*.groovy /var/lib/jenkins/init.groovy.d/
+mv /tmp/config/jenkins /etc/sysconfig/jenkins
+chmod +x /tmp/config/install-plugins.sh
+bash /tmp/config/install-plugins.sh
 service jenkins start
