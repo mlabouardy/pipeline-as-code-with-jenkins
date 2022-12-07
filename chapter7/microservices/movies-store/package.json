@@ -18,9 +18,9 @@
   "author": "Mohamed Labouardy",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "mongoose": "^5.9.9"
   },
   "devDependencies": {
