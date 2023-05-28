@@ -21,6 +21,14 @@ This is the code repository for [Pipeline as Code](https://www.manning.com/books
 * Collecting Continuous Delivery Metrics
 * CI/CD Deployment Strategies and Best Practices
 
+## Tutorials
+
+Free Workshop on how to build a Jenkins cluster on AWS with Terraform and Packer and how to build a CI/CD pipeline for a Serverless app.
+
+<a href="https://www.youtube.com/watch?v=w5J7fBATCu4">
+    <img src="assets/workshop.jpeg" />
+</a>
+
 ## Author
 
 Mohamed Labouardy <mohamed@labouardy.com>
