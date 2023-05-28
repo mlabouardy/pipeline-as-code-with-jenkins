@@ -29,5 +29,6 @@ mv /tmp/scripts/*.groovy /var/lib/jenkins/init.groovy.d/
 chown -R jenkins:jenkins /var/lib/jenkins/init.groovy.d
 mv /tmp/config/jenkins /etc/sysconfig/jenkins
 chmod +x /tmp/config/install-plugins.sh
+chown -R jenkins:jenkins /var/lib/jenkins/plugins
 bash /tmp/config/install-plugins.sh
 service jenkins start
