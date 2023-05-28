@@ -7,8 +7,6 @@ pipeline{
     }
 }
 
-// 
-
 node('workers'){
     stage('Checkout'){}
 }
